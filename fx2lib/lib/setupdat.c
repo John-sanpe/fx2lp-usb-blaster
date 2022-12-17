@@ -12,8 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 //#define DEBUG_SETUPDAT
@@ -31,12 +30,12 @@
 #include <setupdat.h>
 
 
-extern BOOL handle_get_descriptor();
 extern BOOL handle_vendorcommand(BYTE cmd);
 extern BOOL handle_set_configuration(BYTE cfg);
 extern BOOL handle_get_interface(BYTE ifc, BYTE* alt_ifc);
 extern BOOL handle_set_interface(BYTE ifc,BYTE alt_ifc);
 extern BYTE handle_get_configuration();
+extern BOOL handle_set_configuration(BYTE cfg);
 extern void handle_reset_ep(BYTE ep);
 
 /**
@@ -54,7 +53,7 @@ BOOL handle_set_feature();
   // 0x04 is reserved
 //  SET_ADDRESS=0x05, // this is handled by EZ-USB core unless RENUM=0
 //  GET_DESCRIPTOR,
-void _handle_get_descriptor();
+void handle_get_descriptor();
 //  SET_DESCRIPTOR,
 //  GET_CONFIGURATION, // handled by callback
 //  SET_CONFIGURATION, // handled by callback
@@ -89,8 +88,7 @@ void handle_setupdata() {
             }
             break;
         case GET_DESCRIPTOR:
-            if (!handle_get_descriptor())
-              _handle_get_descriptor();
+            handle_get_descriptor();
             break;
         case GET_CONFIGURATION:            
             EP0BUF[0] = handle_get_configuration();
@@ -211,16 +209,12 @@ BOOL handle_clear_feature() {
         remote_wakeup_allowed=FALSE;
         break;
     }
-
-    if (SETUPDAT[2] == 6) // debug feature
-	break;
     return FALSE;
    case GF_ENDPOINT:
     if (SETUPDAT[2] == 0) { // ep stall feature
         __xdata BYTE* pep=ep_addr(SETUPDAT[4]);
         printf ( "unstall endpoint %02X\n" , SETUPDAT[4] );
         *pep &= ~bmEPSTALL;        
-	RESETTOGGLE(SETUPDAT[4]);
     } else {
         printf ( "unsupported ep feature %02x", SETUPDAT[2] );
         return FALSE;
@@ -242,8 +236,6 @@ BOOL handle_set_feature() {
        remote_wakeup_allowed=TRUE; 
        break;
     }
-    if (SETUPDAT[2] == 6) // debug feature
-	break;
     return FALSE;
   case GF_ENDPOINT:
     if ( SETUPDAT[2] == 0 ) { // ep stall feature
@@ -307,7 +299,7 @@ void handle_hispeed(BOOL highspeed) {
  *  String
  *  Other-Speed
  **/
-void _handle_get_descriptor() {
+void handle_get_descriptor() {
     //printf ( "Get Descriptor\n" );
     
     switch ( SETUPDAT[3] ) {

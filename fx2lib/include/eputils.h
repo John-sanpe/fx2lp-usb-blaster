@@ -11,8 +11,7 @@
 // Lesser General Public License for more details.
 // 
 // You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+// License along with this library; if not, see <http://www.gnu.org/licenses/>.
 
 /*! \file 
  *  Functions and macros for working with endpoints.
@@ -32,7 +31,7 @@
  *
  * Example:
  * \code
- *  #define SYNCDELAY SYNCDELAY4 // SYNCDELAY4 from delay.h
+ *  #define SYNCDELAY() SYNCDELAY4 // SYNCDELAY4 from delay.h
  * \endcode
  *
  *
@@ -47,31 +46,25 @@
  * \brief Reset the toggle on an endpoint.
  * To use this, the endpoint needs bit 8 to be IN=1,OUT=0
  **/
-#define RESETTOGGLE(ep) do {\
-	BYTE x = ep; \
-	if (x&0x80) { x |= 0x10; } \
-	x &= 0x1F; \
-	TOGCTL = x; \
-	TOGCTL = x | bmRESETTOGGLE; \
-} while (0)
+#define RESETTOGGLE(ep) TOGCTL = (ep&0x0F) + ((ep&0x80)>>3); TOGCTL |= bmRESETTOGGLE
 
 
 /**
  * RESETFIFO should not use 0x80|epnum for IN endpoints
  * Only use 0x02, 0x04, 0x06, 0x06 for ep value
  **/
-#define RESETFIFO(ep) {FIFORESET=0x80; SYNCDELAY;\
-                       FIFORESET=0x80 | ep; SYNCDELAY;\
-                       FIFORESET=0x00; SYNCDELAY;}
+#define RESETFIFO(ep) {FIFORESET=0x80; SYNCDELAY();\
+                       FIFORESET=ep; SYNCDELAY();\
+                       FIFORESET=0x00; SYNCDELAY();}
 /**
  * Quickly reset all endpoint FIFOS.
  **/
-#define RESETFIFOS() {FIFORESET=0x80; SYNCDELAY;\
-                     FIFORESET=0x82; SYNCDELAY;\
-                     FIFORESET=0x84; SYNCDELAY;\
-                     FIFORESET=0x86; SYNCDELAY;\
-                     FIFORESET=0x88; SYNCDELAY;\
-                     FIFORESET=0x00; SYNCDELAY;}
+#define RESETFIFOS() {FIFORESET=0x80; SYNCDELAY();\
+                     FIFORESET=0x02; SYNCDELAY();\
+                     FIFORESET=0x04; SYNCDELAY();\
+                     FIFORESET=0x06; SYNCDELAY();\
+                     FIFORESET=0x08; SYNCDELAY();\
+                     FIFORESET=0x00; SYNCDELAY();}
 
 /**
  * Continually read available bytes from endpoint0 into dst, wait
