@@ -1,4 +1,4 @@
-// Copyright (C) 2009 Ubixum, Inc. 
+// Copyright (C) 2009 Ubixum, Inc.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -14,7 +14,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-/*! \file 
+/*! \file
  *  Functions for causing delays.
  * */
 
@@ -42,7 +42,7 @@ void delay(WORD millis);
  *
  * Minimum IFCLOCK is 5mhz but you have to use an
  * external clock source to go below 30mhz
- * 
+ *
  * IFCLKSRC 1 = internal, 0=external
  * 3048mhz 0 = 30mhz, 1 = 48mzh
  *
@@ -106,4 +106,3 @@ void delay(WORD millis);
 #define SYNCDELAY16 NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP; NOP
 
 #endif
-

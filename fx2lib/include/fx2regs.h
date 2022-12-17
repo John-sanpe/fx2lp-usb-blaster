@@ -1,4 +1,4 @@
-// Copyright (C) 2009 Ubixum, Inc. 
+// Copyright (C) 2009 Ubixum, Inc.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -14,13 +14,13 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-/*! \file 
+/*! \file
  *
  * This is the basic header/register file for working with the cypress fx2
- * (cyc768013) and variants 8051 chipset.  It contains the special function 
- * register definitions as well as the special configuration registers 
+ * (cyc768013) and variants 8051 chipset.  It contains the special function
+ * register definitions as well as the special configuration registers
  * addresses.
- * 
+ *
  * The TRM for the fx2 chip contains the full documentation for what each of
  * these registers do.
  *
@@ -35,7 +35,7 @@
  * The firmware framework allows for easily beginning a new firware project.
  **/
 
-#ifndef FX2REGS_H 
+#ifndef FX2REGS_H
 #define FX2REGS_H
 
 #include "fx2types.h"
@@ -224,10 +224,10 @@ __xdata __at(0xE6C7) volatile BYTE FLOWLOGIC; ///<Defines flow/hold decision cri
 __xdata __at(0xE6C8) volatile BYTE FLOWEQ0CTL; ///<CTL states during active flow state
 __xdata __at(0xE6C9) volatile BYTE FLOWEQ1CTL; ///<CTL states during hold flow state
 __xdata __at(0xE6CA) volatile BYTE FLOWHOLDOFF;
-__xdata __at(0xE6CB) volatile BYTE FLOWSTB; ///<CTL/RDY Signal to use as master data strobe 
+__xdata __at(0xE6CB) volatile BYTE FLOWSTB; ///<CTL/RDY Signal to use as master data strobe
 __xdata __at(0xE6CC) volatile BYTE FLOWSTBEDGE; ///<Defines active master strobe edge
 __xdata __at(0xE6CD) volatile BYTE FLOWSTBHPERIOD; ///<Half Period of output master strobe
-__xdata __at(0xE60C) volatile BYTE GPIFHOLDAMOUNT; ///<Data delay shift 
+__xdata __at(0xE60C) volatile BYTE GPIFHOLDAMOUNT; ///<Data delay shift
 __xdata __at(0xE67D) volatile BYTE UDMACRCH; ///<CRC Upper byte
 __xdata __at(0xE67E) volatile BYTE UDMACRCL; ///<CRC Lower byte
 __xdata __at(0xE67F) volatile BYTE UDMACRCQUAL; ///<UDMA In only, host terminated use only
@@ -309,7 +309,7 @@ __sfr __at(0x90) IOB;
          __sbit __at(0x90 + 6) PB6;
          __sbit __at(0x90 + 7) PB7;
 __sfr __at(0x91) EXIF;
-         
+
 //__sfr __at(0x92) MPAGE;
 __sfr __at(0x92) _XPAGE; // same as MPAGE for pdata __sfr access w/ sdcc
 __sfr __at(0x98) SCON0;
@@ -324,10 +324,10 @@ __sfr __at(0x98) SCON0;
          __sbit __at(0x98+7) SM0;
 __sfr __at(0x99) SBUF0;
 
-__sfr __at(0x9A) AUTOPTRH1; 
-__sfr __at(0x9B) AUTOPTRL1; 
+__sfr __at(0x9A) AUTOPTRH1;
+__sfr __at(0x9B) AUTOPTRL1;
 __sfr __at(0x9D) AUTOPTRH2;
-__sfr __at(0x9E) AUTOPTRL2; 
+__sfr __at(0x9E) AUTOPTRL2;
 
 __sfr __at(0xA0) IOC;
          /*  IOC  */
@@ -620,7 +620,7 @@ __sfr __at(0xF8) EIP; // EIP Bit Values differ from Reg320
 #define bmWORDWIDE   bmBIT0
 
 /* Chip Revision Control Bits (REVCTL) - used to ebable/disable revision specidic
-   features */ 
+   features */
 #define bmNOAUTOARM    bmBIT1
 #define bmSKIPCOMMIT   bmBIT0
 

@@ -1,3 +1,7 @@
+;; SPDX-License-Identifier: GPL-2.0-or-later
+;;
+;; Copyright(c) 2022 John Sanpe <sanpeqf@gmail.com>
+;;
 
 .macro string_descriptor_a n,str
 _string'n:

@@ -1,19 +1,19 @@
-// Copyright (C) 2009 Ubixum, Inc. 
-// 
+// Copyright (C) 2009 Ubixum, Inc.
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <http://www.gnu.org/licenses/>.
 
-/*! \file 
+/*! \file
  *  Functions and macros for working with endpoints.
  * */
 
@@ -23,10 +23,10 @@
 #include "fx2types.h"
 
 /**
- * NOTE you can't use these unless you define SYNCDELAY 
+ * NOTE you can't use these unless you define SYNCDELAY
  * as a macro or function.  The reason is that SYNCDELAY
  * needs to be longer or shorter depending on your IFCONFIG
- * settings.  
+ * settings.
  * See delay.h
  *
  * Example:
@@ -68,18 +68,15 @@
 
 /**
  * Continually read available bytes from endpoint0 into dst, wait
- * until more bytes are available, and loop until len bytes have 
+ * until more bytes are available, and loop until len bytes have
  * been read.
  **/
 void readep0( BYTE* dst, WORD len );
-
 
 /**
  * Write bytes from src to ep0, allowing host to transfer data
  * between 64 byte blocks.
  **/
 void writeep0 ( BYTE* src, WORD len );
-
-
 
 #endif

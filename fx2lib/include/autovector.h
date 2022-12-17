@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Ubixum, Inc. 
+// Copyright (C) 2010 Ubixum, Inc.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@
  *
  * Unlike the standard fx2 interrupts (\ref fx2ints.h), the autovectored
  * interrupts are defined in assemply and have pre-written function names.
- * Be sure to override the functions defined in this header or your 
+ * Be sure to override the functions defined in this header or your
  * interrupt handler will not be called.
  **/
 
@@ -61,7 +61,7 @@
  **/
 #define USE_GPIF_INTS() {EIEX4=1;\
                         INTSETUP|=bmAV4EN|INT4IN;}
-             
+
 
 #define CLEAR_USBINT() EXIF &= ~0x10
 #define CLEAR_GPIF() EXIF &= ~0x40
@@ -136,7 +136,7 @@ typedef enum {
   SUSPEND_ISR,
   USBRESET_ISR,
   HISPEED_ISR,
-  EP0ACK_ISR,  
+  EP0ACK_ISR,
   EP0IN_ISR,
   EP0OUT_ISR,
   EP1IN_ISR,
@@ -152,7 +152,7 @@ typedef enum {
   EP4PING_ISR,
   EP6PING_ISR,
   EP8PING_ISR,
-  ERRLIMIT_ISR,  
+  ERRLIMIT_ISR,
   EP2ISOERR_ISR,
   EP4ISOERR_ISR,
   EP6ISOERR_ISR,
@@ -224,4 +224,3 @@ void gpifdone_isr() __interrupt;
 void gpifwf_isr() __interrupt;
 
 #endif
-

@@ -11,45 +11,55 @@
 
 static bool sudav_handled;
 static uint8_t ftdi_command;
+static unsigned int led_frequency;
 
-DEFINE_HANDLE(USBRESET_ISR)
+DEFINE_HANDLE(usbreset_isr, USBRESET_ISR)
 {
     handle_hispeed(false);
     CLEAR_USBRESET();
 }
 
-DEFINE_HANDLE(HISPEED_ISR)
+DEFINE_HANDLE(hispeed_isr, HISPEED_ISR)
 {
     handle_hispeed(true);
     CLEAR_HISPEED();
 }
 
-DEFINE_HANDLE(SUDAV_ISR)
+DEFINE_HANDLE(sudav_isr, SUDAV_ISR)
 {
     sudav_handled = true;
     CLEAR_SUDAV();
 }
 
-DEFINE_HANDLE(IBN_ISR)
+DEFINE_HANDLE(ibn_isr, IBN_ISR)
 {
     uint8_t value;
 
     value = IBNIE;
-	IBNIE = 0;
+    IBNIE = 0;
 
     CLEAR_USBINT();
 
-	IBNIRQ = 0xff;
-	NAKIRQ = bmIBN;
-	SYNCDELAY;
+    IBNIRQ = 0xff;
+    NAKIRQ = bmIBN;
+    SYNCDELAY();
 
-	IBNIE = value;
-	SYNCDELAY;
+    IBNIE = value;
+    SYNCDELAY();
 }
 
-bool handle_get_descriptor(void)
+DEFINE_HANDLE(tf2_isr, TF2_ISR)
 {
-    return true;
+    static unsigned int count;
+
+    if (!led_frequency)
+        led_enable();
+    else if (count++ > led_frequency) {
+        led_toggle();
+        count = 0;
+    }
+
+	TF2 = 0;
 }
 
 bool handle_get_interface(uint8_t ifc, uint8_t *alt_ifc)
@@ -84,6 +94,7 @@ bool handle_set_configuration(uint8_t cfg)
 
 bool handle_vendorcommand(uint8_t cmd)
 {
+    (void)cmd;
     return false;
 }
 
@@ -99,6 +110,12 @@ static void fx2lp_hwinit(void)
     ENABLE_HISPEED();
     ENABLE_USBRESET();
 
+    RCAP2L = -500 & 0xff;
+    RCAP2H = (-500 & 0xff00) >> 8;
+    T2CON = 0;
+    TR2 = 1;
+    ENABLE_TIMER2();
+
     EA = 1;
 }
 
@@ -106,19 +123,19 @@ static void endpoints_setup(void)
 {
     /* Setup ep1 input bulk mode */
     EP1INCFG = bmVALID | bmDIR | bmTYPE1 | bmSIZE;
-    SYNCDELAY;
+    SYNCDELAY();
 
     /* Setup ep2 output bulk mode */
     EP2CFG = bmVALID | bmTYPE1 | bmSIZE;
-    SYNCDELAY;
+    SYNCDELAY();
 
     /* Disable all other eps */
     EP4CFG &= ~bmVALID;
-    SYNCDELAY;
+    SYNCDELAY();
     EP6CFG &= ~bmVALID;
-    SYNCDELAY;
+    SYNCDELAY();
     EP8CFG &= ~bmVALID;
-    SYNCDELAY;
+    SYNCDELAY();
 
     /* Reset the fifos. */
     RESETFIFO(1);
@@ -140,54 +157,5 @@ void main(void)
             sudav_handled = false;
         }
 
-        switch (ftdi_command) {
-            case FTDI_REQ_RESET:
-                break;
-
-            case FTDI_REQ_SET_BAUDRATE:
-                break;
-
-            case FTDI_REQ_SET_DATA_CHAR:
-                break;
-
-            case FTDI_REQ_SET_FLOW_CTRL:
-                break;
-
-            case FTDI_REQ_SET_MODEM_CTRL:
-                break;
-
-            case FTDI_REQ_GET_MODEM_STA:
-                break;
-
-            case FTDI_REQ_SET_EVENT_CHAR:
-                break;
-
-            case FTDI_REQ_SET_ERR_CHAR:
-                break;
-
-            case FTDI_REQ_SET_LAT_TIMER:
-                break;
-
-            case FTDI_REQ_GET_LAT_TIMER:
-                break;
-
-            case FTDI_REQ_SET_BITMODE:
-                break;
-
-            case FTDI_REQ_RD_PINS:
-                break;
-
-            case FTDI_REQ_RD_EEPROM:
-                break;
-
-            case FTDI_REQ_WR_EEPROM:
-                break;
-
-            case FTDI_REQ_ES_EEPROM:
-                break;
-
-            default:
-                break;
-        }
     }
 }

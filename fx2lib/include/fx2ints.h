@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Ubixum, Inc. 
+// Copyright (C) 2010 Ubixum, Inc.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -11,10 +11,9 @@
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+// License along with this library; if not, see <http://www.gnu.org/licenses/>.
 
-/*! \file 
+/*! \file
  *  Define the standard fx2 interrupts.  For int2 and int4 autovector
  *  interrupts see \ref autovector.h
  *
@@ -45,7 +44,7 @@ typedef enum {
  IE0_ISR=0, ///< External interrupt 0
  TF0_ISR, ///< Timer 0 interrupt
  IE1_ISR, ///< External interrupt 1
- TF1_ISR, ///< Timer 1 interrupt  
+ TF1_ISR, ///< Timer 1 interrupt
  TI_0_ISR, ///< Serial port 0 transmit or receive interrupt
  TF2_ISR, ///< Timer 2 interrupt
  RESUME_ISR, ///< Resume interrupt
@@ -61,7 +60,7 @@ typedef enum {
 /**
  * \brief Enable the timer 0 interrupt.
  *
- * There is not CLEAR_TIMER0 because the timer interrupt flag 
+ * There is not CLEAR_TIMER0 because the timer interrupt flag
  * is automatically cleared when the isr is called.
  **/
 #define ENABLE_TIMER0() ET0=1
@@ -77,7 +76,7 @@ typedef enum {
 /**
  * \brief Enable timer 2 interrupt
  *
- * This is the same interrupt whether timer 2 overflowed or 
+ * This is the same interrupt whether timer 2 overflowed or
  * for the external EXF2 flag.
  **/
 #define ENABLE_TIMER2() ET2=1
@@ -91,7 +90,7 @@ typedef enum {
 /**
  * \brief Enable the Resume Interrupt.  Requires EA=1 separately.
  **/
-#define ENABLE_RESUME() ERESI = 1 
+#define ENABLE_RESUME() ERESI = 1
 
 /**
  * \brief Clear the resume interrupt.  Use within the resume
@@ -100,17 +99,16 @@ typedef enum {
 #define CLEAR_RESUME() RESI=0
 
 
-#define ENABLE_INT4() 
+#define ENABLE_INT4()
 
 /**
- * \brief 
+ * \brief
  * Enable external interupt for int5#
  **/
-#define ENABLE_INT5() EIEX5=1 
+#define ENABLE_INT5() EIEX5=1
 
 /**
- * \brief 
+ * \brief
  * Clear int5# interrupt
  **/
 #define CLEAR_INT5() EXIF &= ~0x80
-

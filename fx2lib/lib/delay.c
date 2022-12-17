@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009 Ubixum, Inc. 
+ * Copyright (C) 2009 Ubixum, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,16 +29,16 @@ void delay(WORD millis) {
      *  (assume 333.3ns at 12mhz)
      * ez-usb trm 12.1
      *  Includes the cycles for each instruction
-     **/    
+     **/
     WORD loop_count;
     volatile WORD count;  // NOTE perhaps use different solutions w/ out volatile
-    
-    
+
+
     // set count to the number of times we need to
     // go around a loop for 1 millisecond
-    
+
     // then do that loop millis times. (1000 us=1ms)
-    
+
     // 48mhz: 1000 us / (17 cycles * 83.3 ns / cycle / 1000 ns/us) = 706
     // 24mhz: 353
     // 12mhz: 177
@@ -46,7 +46,7 @@ void delay(WORD millis) {
     // like if you change the loop below
     loop_count = CPUFREQ == CLK_12M ? 177 :
                  CPUFREQ == CLK_24M ? 353 : 706;
-    
+
     // sdcc generated assembly
     /*  cycles   code
                 ;   delay.c:31: do {
@@ -60,14 +60,14 @@ void delay(WORD millis) {
         2           mov a,_delay_count_1_1
         2           orl a,(_delay_count_1_1 + 1)
         3           jnz 00101$
-        
+
         Total 17
     */
-    
+
     do {
         count = loop_count;
-        do {            
-        } while ( --count );        
+        do {
+        } while ( --count );
     } while ( --millis );
-    
+
 }

@@ -1,4 +1,4 @@
-// Copyright (C) 2009 Ubixum, Inc. 
+// Copyright (C) 2009 Ubixum, Inc.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -27,11 +27,11 @@
  This module needs initialized with a device descriptor.
  NOTE that your descriptors need to be located in code memory
  to use the SUDPTRH:L to auto transfer the data
- 
+
  and vendor commands handler.  You have to provide callbacks.
 
 DEVICE DESCRIPTORS
- 
+
  // copy the dscr_asm file from the lib dir to your
  // own project directory, change it how
  // you want, and link it against your project
@@ -42,7 +42,7 @@ VENDOR COMMANDS
   0xA1-0xAF is reserved for other ez-usb functions so don't use that
   Any other value (Above 0x0C anyway) can be used for device specific
   commands.
-  
+
   If you include this file, you need to define a function for vendor
   commands even if you don't want to implement any vendor commands.
   The function should return TRUE if you handled the command and FALSE
@@ -51,8 +51,8 @@ VENDOR COMMANDS
   before returning so there is no reason to set that bit in your
   vendor command handler.  (You do need to Set EP0 data and
   byte counts appropriately though.)
-  
-  // return TRUE if you handle the command 
+
+  // return TRUE if you handle the command
   // you can directly get SETUPDAT[0-7] for the data sent with the command
   BOOL handle_vendorcommand(BYTE cmd) { return FALSE; }
   // a note  on vencor commands
@@ -73,8 +73,8 @@ VENDOR COMMANDS
         4..31 = Reserved
   // if you want libusb to send data back to the host via ep0, you need to make
   // sure the requesttype had 1 in bit 7.  This is for libusb on linux anyway.
-  
-  
+
+
   // set *alt_ifc to the current alt interface for ifc
   BOOL handle_get_interface(BYTE ifc, BYTE* alt_ifc) { *ifc=0;*alt_ifc=0;}
   // return TRUE if you set the interface requested
@@ -99,19 +99,19 @@ VENDOR COMMANDS
 
 #define SETUP_VALUE() MAKEWORD(SETUPDAT[3],SETUPDAT[2])
 #define SETUP_INDEX() MAKEWORD(SETUPDAT[5],SETUPDAT[4])
-#define SETUP_LENGTH() MAKEWORD(SETUPDAT[7],SETUPDAT[6]) 
+#define SETUP_LENGTH() MAKEWORD(SETUPDAT[7],SETUPDAT[6])
 #define SETUP_TYPE SETUPDAT[0]
 
 /**
- * self_powered is set to FALSE by default.  It is 
- * used for GET_FEATURE requests.  Firmware can set it to 
+ * self_powered is set to FALSE by default.  It is
+ * used for GET_FEATURE requests.  Firmware can set it to
  * TRUE if the device is not powered by the USB bus.
  **/
 extern volatile BOOL self_powered;
 
 /**
  * remote_wakeup_allowed defaults to FALSE but can be
- * set to TRUE with SET_FEATURE from the host. (firmware shouldn't 
+ * set to TRUE with SET_FEATURE from the host. (firmware shouldn't
  * set this.)
  **/
 extern volatile BOOL remote_wakeup_allowed;
@@ -162,7 +162,7 @@ void handle_setupdata();
     a __critical section to switch the descriptors and is safe to call
     from the hispeed or reset interrupt.  See \ref fw.c
 
-    \param highspeed Call the function with highspeed = TRUE if 
+    \param highspeed Call the function with highspeed = TRUE if
         calling because the highspeed interrupt was received.
         If calling from usbreset, call with highspeed=false
 **/
@@ -199,7 +199,7 @@ typedef struct {
     BYTE idx_devstr; // product string index
     BYTE idx_serstr; // serial number index
     BYTE num_configs; // number of configurations
-        
+
 } DEVICE_DSCR;
 
 
@@ -208,7 +208,7 @@ typedef struct {
 typedef struct {
     BYTE dsc_len; // 9 for this one
     BYTE dsc_type; // dscr type
-    
+
 } CONFIG_DSCR;
 
 /* string descriptor */
@@ -217,8 +217,5 @@ typedef struct {
     BYTE dsc_type;
     BYTE pstr;
 } STRING_DSCR;
-
-
-
 
 #endif

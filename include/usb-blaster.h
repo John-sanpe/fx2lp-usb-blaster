@@ -11,7 +11,7 @@
 #include <fx2ints.h>
 #include <autovector.h>
 
-#define SYNCDELAY SYNCDELAY4
+#define SYNCDELAY() SYNCDELAY4
 
 #define TMS_BIT bmBIT0
 #define TCK_BIT bmBIT1

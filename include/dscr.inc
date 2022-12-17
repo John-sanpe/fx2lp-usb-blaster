@@ -35,10 +35,10 @@ _dev_dscr:
     .db     dev_dscr_end - _dev_dscr
     .db     DSCR_DEVICE_TYPE
     .dw     0x0002              ; USB 2.0
-    .db     0xff                ; Class (vendor specific)
-    .db     0xff                ; Subclass (vendor specific)
-    .db     0xff                ; Protocol (vendor specific)
-    .db     64                  ; Max. EP0 packet size
+    .db     0x00                ; Class (vendor specific)
+    .db     0x00                ; Subclass (vendor specific)
+    .db     0x00                ; Protocol (vendor specific)
+    .db     0x08                ; Max. EP0 packet size
     .dw     VID                 ; Manufacturer ID
     .dw     PID                 ; Product ID
     .dw     0x0100              ; Product version (0.01)
@@ -46,6 +46,7 @@ _dev_dscr:
     .db     2                   ; Product string index
     .db     3                   ; Serial number string index (none)
     .db     1                   ; Number of configurations
+
 dev_dscr_end:
 
 ; -----------------------------------------------------------------------------
@@ -62,6 +63,7 @@ _dev_qual_dscr:
     .db     64                  ; Max. EP0 packet size
     .db     1                   ; Number of configurations
     .db     0                   ; Extra reserved byte
+
 dev_qualdscr_end:
 
 ; -----------------------------------------------------------------------------
@@ -71,6 +73,7 @@ dev_qualdscr_end:
 _highspd_dscr:
     .db     highspd_dscr_end - _highspd_dscr
     .db     DSCR_CONFIG_TYPE
+
     ; Total length of the configuration (1st line LSB, 2nd line MSB)
     .db     (highspd_dscr_realend - _highspd_dscr) % 256
     .db     (highspd_dscr_realend - _highspd_dscr) / 256
@@ -79,6 +82,7 @@ _highspd_dscr:
     .db     0                   ; Configuration string (none)
     .db     0x80                ; Attributes (bus powered, no wakeup)
     .db     0x32                ; Max. power (100mA)
+
 highspd_dscr_end:
 
     ; Interfaces (only one in our case)
@@ -93,16 +97,15 @@ highspd_dscr_end:
     .db     0                   ; String index (none)
 
     ; Endpoint 2 (IN)
-    .db	DSCR_ENDPOINT_LEN
-    .db	DSCR_ENDPOINT_TYPE
-    .db	0x82			; EP number (2), direction (IN)
-    .db	ENDPOINT_TYPE_BULK	; Endpoint type (bulk)
-    .db	0x00			; Max. packet size, LSB (512 bytes)
-    .db	0x02			; Max. packet size, MSB (512 bytes)
-    .db	0x00			; Polling interval (ignored for bulk)
+    .db     DSCR_ENDPOINT_LEN
+    .db     DSCR_ENDPOINT_TYPE
+    .db     0x82                ; EP number (2), direction (IN)
+    .db     ENDPOINT_TYPE_BULK  ; Endpoint type (bulk)
+    .db     0x00                ; Max. packet size, LSB (512 bytes)
+    .db     0x02                ; Max. packet size, MSB (512 bytes)
+    .db     0x00                ; Polling interval (ignored for bulk)
 
 highspd_dscr_realend:
-
     .even
 
 ; -----------------------------------------------------------------------------
@@ -110,40 +113,41 @@ highspd_dscr_realend:
 ; -----------------------------------------------------------------------------
 
 _fullspd_dscr:
-    .db	fullspd_dscr_end - _fullspd_dscr
-    .db	DSCR_CONFIG_TYPE
+    .db     fullspd_dscr_end - _fullspd_dscr
+    .db     DSCR_CONFIG_TYPE
+
     ; Total length of the configuration (1st line LSB, 2nd line MSB)
-    .db	(fullspd_dscr_realend - _fullspd_dscr) % 256
-    .db	(fullspd_dscr_realend - _fullspd_dscr) / 256
-    .db	1			; Number of interfaces
-    .db	1			; Configuration number
-    .db	0			; Configuration string (none)
-    .db	0x80			; Attributes (bus powered, no wakeup)
-    .db	0x32			; Max. power (100mA)
+    .db     (fullspd_dscr_realend - _fullspd_dscr) % 256
+    .db     (fullspd_dscr_realend - _fullspd_dscr) / 256
+    .db     1                   ; Number of interfaces
+    .db     1                   ; Configuration number
+    .db     0                   ; Configuration string (none)
+    .db     0x80                ; Attributes (bus powered, no wakeup)
+    .db     0x32                ; Max. power (100mA)
+
 fullspd_dscr_end:
 
     ; Interfaces (only one in our case)
-    .db	DSCR_INTERFACE_LEN
-    .db	DSCR_INTERFACE_TYPE
-    .db	0			; Interface index
-    .db	0			; Alternate setting index
-    .db	1			; Number of endpoints
-    .db	0xff			; Class (vendor specific)
-    .db	0xff			; Subclass (vendor specific)
-    .db	0xff			; Protocol (vendor specific)
-    .db	0			; String index (none)
+    .db     DSCR_INTERFACE_LEN
+    .db     DSCR_INTERFACE_TYPE
+    .db     0                   ; Interface index
+    .db     0                   ; Alternate setting index
+    .db     1                   ; Number of endpoints
+    .db     0xff                ; Class (vendor specific)
+    .db     0xff                ; Subclass (vendor specific)
+    .db     0xff                ; Protocol (vendor specific)
+    .db     0                   ; String index (none)
 
     ; Endpoint 2 (IN)
-    .db	DSCR_ENDPOINT_LEN
-    .db	DSCR_ENDPOINT_TYPE
-    .db	0x82			; EP number (2), direction (IN)
-    .db	ENDPOINT_TYPE_BULK	; Endpoint type (bulk)
-    .db	0x40			; Max. packet size, LSB (64 bytes)
-    .db	0x00			; Max. packet size, MSB (64 bytes)
-    .db	0x00			; Polling interval (ignored for bulk)
+    .db     DSCR_ENDPOINT_LEN
+    .db     DSCR_ENDPOINT_TYPE
+    .db     0x82                ; EP number (2), direction (IN)
+    .db     ENDPOINT_TYPE_BULK  ; Endpoint type (bulk)
+    .db     0x40                ; Max. packet size, LSB (64 bytes)
+    .db     0x00                ; Max. packet size, MSB (64 bytes)
+    .db     0x00                ; Polling interval (ignored for bulk)
 
 fullspd_dscr_realend:
-
     .even
 
 ; -----------------------------------------------------------------------------
@@ -153,7 +157,7 @@ fullspd_dscr_realend:
 _dev_strings:
 
 ; See http://www.usb.org/developers/docs/USB_LANGIDs.pdf for the full list.
-string_descriptor_lang 0 0x0409 ; Language code 0x0409 (English, US)
+string_descriptor_lang 0,0x0409 ; Language code 0x0409 (English, US)
 
-string_descriptor_a 1,^"sigrok"
-string_descriptor_a 2,^"fx2lafw"
+string_descriptor_a 1,^"Altera"
+string_descriptor_a 2,^"USB-Blaster"

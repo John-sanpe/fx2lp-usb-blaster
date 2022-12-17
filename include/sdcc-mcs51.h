@@ -29,7 +29,7 @@ enum {
 #define REG_SFR(name, base) SECTION_SFR __at(base) name;
 #define REG_BIT(name, base, shift) SECTION_SBIT __at(base + shift) name;
 
-#define DECLARE_HANDLE(vector) extern void vector##_entry(void) __interrupt
-#define DEFINE_HANDLE(vector) void vector##_entry(void) __interrupt vector
+#define DECLARE_HANDLE(name, vector) extern void name(void) __interrupt
+#define DEFINE_HANDLE(name, vector) void name(void) __interrupt vector
 
 #endif /* _SDCC_MCS51_H_ */

@@ -1,4 +1,4 @@
-// Copyright (C) 2009 Ubixum, Inc. 
+// Copyright (C) 2009 Ubixum, Inc.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -14,7 +14,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-/*! \file 
+/*! \file
  *  Macros for simple common tasks in fx2 firmware.
  * */
 
@@ -50,8 +50,8 @@ typedef enum { CLK_12M =0, CLK_24M, CLK_48M} CLK_SPD;
 #define SETCPUFREQ(SPD) CPUCS = (CPUCS & ~bmCLKSPD) | (SPD << 3)
 
 /**
- * \brief Evaluates to a DWORD value representing 
- *  the clock speed in cycles per second. 
+ * \brief Evaluates to a DWORD value representing
+ *  the clock speed in cycles per second.
  *
  * Speeds:
  *
@@ -62,7 +62,6 @@ typedef enum { CLK_12M =0, CLK_24M, CLK_48M} CLK_SPD;
  **/
 #define XTAL (CPUFREQ==CLK_12M ? 12000000L :\
               CPUFREQ==CLK_24M ? 24000000L : 48000000L)
-
 
 /**
  * \brief Evaluates to the i2c bus frequency in cyles per
@@ -76,11 +75,9 @@ typedef enum { CLK_12M =0, CLK_24M, CLK_48M} CLK_SPD;
  **/
 #define I2CFREQ ((I2CTL & bm400KHZ) ? 400000L : 100000L)
 
-
 #define IFFREQ (IFCONFIG & bm3048MHZ ? 48000000L : 30000000L)
 #define SETIF30MHZ() IFCONFIG &= ~bm3048MHZ
 #define SETIF48MHZ() IFCONFIG |= bm3048MHZ
-
 
 // eeprom stuff
 #define EEPROM_TWO_BYTE (I2CS & bmBIT4)
@@ -91,9 +88,9 @@ typedef enum { CLK_12M =0, CLK_24M, CLK_48M} CLK_SPD;
  *
  *  <b>NOTE</b> Windows really doesn't like this if the firmware is loaded
  *  from an eeprom.  You'll see information messages about the device not
- *  working properly.  On the other hand, if you are changing the device 
- *  descriptor, e.g., the vendor and product id, when downloading firmware to the device, 
- *  you'll need to use this macro instead of the  
+ *  working properly.  On the other hand, if you are changing the device
+ *  descriptor, e.g., the vendor and product id, when downloading firmware to the device,
+ *  you'll need to use this macro instead of the
  *  standard RENUMERATE macro.
  **/
 #define RENUMERATE_UNCOND() USBCS|=bmDISCON|bmRENUM;delay(1500);USBCS&=~bmDISCON
@@ -103,25 +100,17 @@ typedef enum { CLK_12M =0, CLK_24M, CLK_48M} CLK_SPD;
  **/
 #define RENUMERATE() if(!(USBCS&bmRENUM)) {USBCS|=bmDISCON|bmRENUM;delay(1500);USBCS &= ~bmDISCON;}
 
-
 // interrupts
 // USB interrupts are in usbjt.h
-
-
-
 
 /**
  * \brief TRUE if the FX2 has transitioned to high speed on the USB bus..
  **/
 #define HISPEED (USBCS&bmHSM)
 
-
-
-
 /**
  * \brief Evaluates to TRUE if a remote wakeup event has occurred.
  **/
 #define REMOTE_WAKEUP() (((WAKEUPCS & bmWU) && (WAKEUPCS & bmWUEN)) || ((WAKEUPCS & bmWU2) && (WAKEUPCS & bmWU2EN)))
-
 
 #endif

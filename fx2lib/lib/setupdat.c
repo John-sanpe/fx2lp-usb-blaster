@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009 Ubixum, Inc. 
+ * Copyright (C) 2009 Ubixum, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -69,10 +69,7 @@ void handle_get_descriptor();
 */
 
 void handle_setupdata() {
-    //printf ( "Handle setupdat: %02x\n", SETUPDAT[1] );
-
     switch ( SETUPDAT[1] ) {
-
         case GET_STATUS:
             if (!handle_get_status())
                 STALLEP0();
@@ -90,7 +87,7 @@ void handle_setupdata() {
         case GET_DESCRIPTOR:
             handle_get_descriptor();
             break;
-        case GET_CONFIGURATION:            
+        case GET_CONFIGURATION:
             EP0BUF[0] = handle_get_configuration();
             EP0BCH=0;
             EP0BCL=1;
@@ -124,13 +121,13 @@ void handle_setupdata() {
             printf ( "Unhandled Vendor Command: %02x\n" , SETUPDAT[1] );
             STALLEP0();
          }
-        
-        
+
+
     }
-    
+
     // do the handshake
     EP0CS |= bmHSNAK;
-    
+
 }
 
 __xdata BYTE* ep_addr(BYTE ep) { // bit 8 of ep_num is the direction
@@ -157,11 +154,9 @@ volatile BOOL self_powered=FALSE;
 volatile BOOL remote_wakeup_allowed=FALSE;
 
 BOOL handle_get_status() {
-    
-    switch ( SETUPDAT[0] ) {
 
-//        case 0: // sometimes we get a 0 status too
-        case GS_INTERFACE: 
+    switch ( SETUPDAT[0] ) {
+        case GS_INTERFACE:
             EP0BUF[0] = 0;
             EP0BUF[1] = 0;
             EP0BCH=0;
@@ -191,8 +186,8 @@ BOOL handle_get_status() {
         default:
             printf ( "Unexpected Get Status: %02x\n", SETUPDAT[0] );
             return FALSE;
-            
-                        
+
+
     }
     return TRUE;
 }
@@ -202,7 +197,6 @@ BOOL handle_get_status() {
 #define GF_ENDPOINT 2
 
 BOOL handle_clear_feature() {
- //printf ( "Clear Feature\n" );
  switch ( SETUPDAT[0] ) {
    case GF_DEVICE:
     if (SETUPDAT[2] == 1) {
@@ -214,7 +208,7 @@ BOOL handle_clear_feature() {
     if (SETUPDAT[2] == 0) { // ep stall feature
         __xdata BYTE* pep=ep_addr(SETUPDAT[4]);
         printf ( "unstall endpoint %02X\n" , SETUPDAT[4] );
-        *pep &= ~bmEPSTALL;        
+        *pep &= ~bmEPSTALL;
     } else {
         printf ( "unsupported ep feature %02x", SETUPDAT[2] );
         return FALSE;
@@ -233,7 +227,7 @@ BOOL handle_set_feature() {
   case GF_DEVICE:
     if (SETUPDAT[2] == 2) break; // this is TEST_MODE and we simply need to return the handshake
     if (SETUPDAT[2] == 1) {
-       remote_wakeup_allowed=TRUE; 
+       remote_wakeup_allowed=TRUE;
        break;
     }
     return FALSE;
@@ -243,10 +237,10 @@ BOOL handle_set_feature() {
         // stall and endpoint
         __xdata BYTE* pep = ep_addr(SETUPDAT[4]);
         printf ( "Stall ep %d\n", SETUPDAT[4] );
-        if (!pep) {            
+        if (!pep) {
             return FALSE;
         }
-        
+
         *pep |= bmEPSTALL;
         // should now reset data toggles
         // write ep+dir to TOGCTL
@@ -254,11 +248,11 @@ BOOL handle_set_feature() {
         // restore stalled ep to default condition
         // NOTE
         //handle_reset_ep(SETUPDAT[4]);
-        
+
     } else {
         printf ( "unsupported ep feature %02x\n", SETUPDAT[2] );
         return FALSE;
-    }  
+    }
    break;
    default:
     return handle_vendorcommand(SETUPDAT[1]);
@@ -279,7 +273,7 @@ WORD pDevConfig = (WORD)&fullspd_dscr;
 WORD pOtherConfig = (WORD)&highspd_dscr;
 
 void handle_hispeed(BOOL highspeed) {
- __critical { 
+ __critical {
      printf ( "Hi Speed or reset Interrupt\n" );
      if (highspeed) {
          pDevConfig=(WORD)&highspd_dscr;
@@ -301,7 +295,7 @@ void handle_hispeed(BOOL highspeed) {
  **/
 void handle_get_descriptor() {
     //printf ( "Get Descriptor\n" );
-    
+
     switch ( SETUPDAT[3] ) {
         case DSCR_DEVICE_TYPE:
             printf ( "Get Device Config\n" );
@@ -313,7 +307,7 @@ void handle_get_descriptor() {
             printf ( "Get Config Descriptor\n");
             SUDPTRH = MSB(pDevConfig);
             SUDPTRL = LSB(pDevConfig);
-            break;        
+            break;
         case DSCR_STRING_TYPE:
             //printf ( "Get String Descriptor idx: %d\n", SETUPDAT[2] );
             {
@@ -323,28 +317,17 @@ void handle_get_descriptor() {
                 BYTE cur=0; // current check
                 do {
                     if (idx==cur++) break;
-                    //printf ( "Length of pStr: %d\n", pStr->dsc_len );
-                    //printf ( "pstr: %04x to ", pStr );
                     pStr = (STRING_DSCR*)((BYTE*)pStr + pStr->dsc_len);
-                    //printf ( "%04x\n" , pStr );
                     if (pStr->dsc_type != DSCR_STRING_TYPE) pStr=NULL;
                 } while ( pStr && cur<=idx);
-                
+
                 if (pStr) {
-                    /* BYTE i;
-                    //printf ( "found str: '");
-                    for (i=0;i<pStr->dsc_len-2;++i) {
-                       printf ( i%2==0?"%c":"%02x", *((BYTE*)(&pStr->pstr)+i));
-                    } printf ( "\n"); */
-                    
                     SUDPTRH = MSB((WORD)pStr);
                     SUDPTRL = LSB((WORD)pStr);
-                    //SUDPTRH = MSB((WORD)&dev_strings);
-                    //SUDPTRL = LSB((WORD)&dev_strings);
                 } else {STALLEP0();}
-                
+
             }
-            
+
             break;
         case DSCR_DEVQUAL_TYPE:
             printf ( "Get Device Qualifier Descriptor\n");
@@ -361,6 +344,6 @@ void handle_get_descriptor() {
             printf ( "Unhandled Get Descriptor: %02x\n", SETUPDAT[3]);
             STALLEP0();
     }
-    
+
 }
 
