@@ -96,6 +96,22 @@ VENDOR COMMANDS
   \endverbatim
 */
 
+#ifndef USB_REQ_TYP_MASK
+# define USB_REQ_TYP_IN         0x80
+# define USB_REQ_TYP_OUT        0x00
+# define USB_REQ_TYP_READ       0x80
+# define USB_REQ_TYP_WRITE      0x00
+# define USB_REQ_TYP_MASK       0x60
+# define USB_REQ_TYP_STANDARD   0x00
+# define USB_REQ_TYP_CLASS      0x20
+# define USB_REQ_TYP_VENDOR     0x40
+# define USB_REQ_TYP_RESERVED   0x60
+# define USB_REQ_RECIP_MASK     0x1F
+# define USB_REQ_RECIP_DEVICE   0x00
+# define USB_REQ_RECIP_INTERF   0x01
+# define USB_REQ_RECIP_ENDP     0x02
+# define USB_REQ_RECIP_OTHER    0x03
+#endif
 
 #define SETUP_VALUE() MAKEWORD(SETUPDAT[3],SETUPDAT[2])
 #define SETUP_INDEX() MAKEWORD(SETUPDAT[5],SETUPDAT[4])

@@ -31,4 +31,6 @@
 #define led_disable()   do { LED_PIN = !LED_POLARITY; } while (0)
 #define led_toggle()    do { LED_PIN = !LED_PIN; } while (0)
 
+extern SECTION_CODE uint8_t ftdi_eeprom[128];
+
 #endif /* _USB_BLASTER_H_ */

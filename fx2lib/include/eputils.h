@@ -66,17 +66,4 @@
                      FIFORESET=0x08; SYNCDELAY();\
                      FIFORESET=0x00; SYNCDELAY();}
 
-/**
- * Continually read available bytes from endpoint0 into dst, wait
- * until more bytes are available, and loop until len bytes have
- * been read.
- **/
-void readep0( BYTE* dst, WORD len );
-
-/**
- * Write bytes from src to ep0, allowing host to transfer data
- * between 64 byte blocks.
- **/
-void writeep0 ( BYTE* src, WORD len );
-
 #endif
